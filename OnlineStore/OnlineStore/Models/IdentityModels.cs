@@ -35,5 +35,10 @@ namespace OnlineStore.Models
         public System.Data.Entity.DbSet<OnlineStore.Models.Producto> Productos { get; set; }
 
         public System.Data.Entity.DbSet<OnlineStore.Models.CarritoItem> CarritoItems { get; set; }
+
+        public System.Data.Entity.DbSet<OnlineStore.Models.Orden> Ordenes { get; set; }
+
+        public System.Data.Entity.DbSet<OnlineStore.Models.OrdenDetalle> OrdenDetalle { get; set; }
+
     }
 }

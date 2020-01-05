@@ -49,13 +49,13 @@
         </tr>
     }
 
-    <tr>
-        <td></td>
-        <td></td>
-        <td>Total</td>
-        <td>$@total</td>
-        <td>Finalizar Compra | @Html.ActionLink("Seguir Comprando","Index", "Home")</td>
-        <th></th>
-    </tr>
+<tr>
+    <td></td>
+    <td></td>
+    <td>Total</td>
+    <td>$@total</td>
+    <td>@Html.ActionLink("Finalizar Compra", "FinalizarCompra", new { usuarioEmail = User.Identity.Name }) | @Html.ActionLink("Seguir Comprando", "Index", "Home")</td>
+    <th></th>
+</tr>
 </table>
-<div>@Html.ActionLink("Borrar Todos", "BorrarTodos", new { userEmail = User.Identity.Name })</div>
+<div>@Html.ActionLink("Borrar Todos", "BorrarTodos", new { usuarioEmail = User.Identity.Name })</div>

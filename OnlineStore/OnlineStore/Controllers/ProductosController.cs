@@ -18,7 +18,7 @@ namespace OnlineStore.Controllers
         // GET: Productos
         public ActionResult Index()
         {
-            var Productos = db.Productos.Include(p => p.Categoria);
+            var Productos = db.Productos;
             return View(Productos.ToList());
         }
 

@@ -15,26 +15,26 @@ namespace OnlineStore.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Carrito
-        public ActionResult Index(string userEmail)
+        public ActionResult Index(string usuarioEmail)
         {
             IEnumerable<CarritoItem> items;
-            if (userEmail != null)
+            if (usuarioEmail != null)
             {
-                items = db.CarritoItems.Where(x => x.UserEmail == userEmail).ToList();
+                items = db.CarritoItems.Where(x => x.UsuarioEmail == usuarioEmail).ToList();
             }
             else
             {
-                items = db.CarritoItems.Where(x => x.UserEmail == "").ToList();
+                items = db.CarritoItems.Where(x => x.UsuarioEmail == "").ToList();
             }
             return View(items);
         }
 
         public ActionResult AgregarItem(int? productoId)
         {
-            string userEmail = User.Identity.Name;
+            string usuarioEmail = User.Identity.Name;
             if (productoId != null)
             {
-                CarritoItem item = itemExistente(productoId, userEmail);
+                CarritoItem item = itemExistente(productoId, usuarioEmail);
                 if (item == null)
                 {
                     item = crearItem(productoId);
@@ -47,26 +47,48 @@ namespace OnlineStore.Controllers
                 }
                 db.SaveChanges(); 
             }
-            return RedirectToAction("Index", new { userEmail = userEmail });
+            return RedirectToAction("Index", new { usuarioEmail = usuarioEmail });
         }
 
-        private CarritoItem itemExistente(int? productoId, string userEmail)
+        private CarritoItem itemExistente(int? productoId, string usuarioEmail)
         {
-            return db.CarritoItems.Where(x => x.ProductoId == productoId && x.UserEmail == userEmail).SingleOrDefault();
+            return db.CarritoItems.Where(x => x.ProductoId == productoId && x.UsuarioEmail == usuarioEmail).SingleOrDefault();
         }
 
-        private IEnumerable<CarritoItem> itemsDelCarrito(string userEmail)
+        private IEnumerable<CarritoItem> itemsDelCarrito(string usuarioEmail)
         {
             IEnumerable<CarritoItem> items;
-            if (userEmail != null)
+            if (usuarioEmail != null)
             {
-                items = db.CarritoItems.Where(x => x.UserEmail == userEmail).ToList();
+                items = db.CarritoItems.Where(x => x.UsuarioEmail == usuarioEmail).ToList();
             }
             else
             {
-                items = db.CarritoItems.Where(x => x.UserEmail == "").ToList();
+                items = db.CarritoItems.Where(x => x.UsuarioEmail == "").ToList();
             }
             return items;
+        }
+
+        private void agregarItemsDelCarritoALaOrden(string usuarioEmail, int orderId)
+        {
+            IEnumerable<CarritoItem> items = itemsDelCarrito(usuarioEmail);
+            foreach (var item in items)
+            {
+                OrdenDetalle ordenDetalle = crearOrdenDetalle(item, orderId);
+                db.OrdenDetalle.Add(ordenDetalle);
+                db.CarritoItems.Remove(item);
+                db.SaveChanges();
+            }
+        }
+
+        private OrdenDetalle crearOrdenDetalle(CarritoItem item, int orderId)
+        {
+            return new OrdenDetalle()
+            {
+                OrdenId = orderId,
+                ProductoId = item.ProductoId,
+                Cantidad = item.Cantidad,
+            };
         }
 
         private CarritoItem crearItem(int? productoId)
@@ -75,7 +97,7 @@ namespace OnlineStore.Controllers
                 {
                     Producto = db.Productos.Find(productoId),
                     Cantidad = 1,
-                    UserEmail = User.Identity.Name,
+                    UsuarioEmail = User.Identity.Name,
                 };     
         }
 
@@ -88,7 +110,7 @@ namespace OnlineStore.Controllers
                 db.Entry(item).State = EntityState.Modified;
                 db.SaveChanges();
             }
-            return RedirectToAction("Index", new { userEmail = User.Identity.Name });
+            return RedirectToAction("Index", new { usuarioEmail = User.Identity.Name });
         }
 
         public ActionResult RestarUno(int? carritoItemId)
@@ -108,7 +130,7 @@ namespace OnlineStore.Controllers
                 }
                 db.SaveChanges();
             }
-            return RedirectToAction("Index", new { userEmail = User.Identity.Name });
+            return RedirectToAction("Index", new { usuarioEmail = User.Identity.Name });
         }
 
         public ActionResult BorrarUno(int? carritoItemId)
@@ -119,18 +141,31 @@ namespace OnlineStore.Controllers
                 db.CarritoItems.Remove(item);
                 db.SaveChanges();
             }
-            return RedirectToAction("Index", new { userEmail = User.Identity.Name });
+            return RedirectToAction("Index", new { usuarioEmail = User.Identity.Name });
         }
 
-        public ActionResult BorrarTodos(string userEmail)
+        public ActionResult BorrarTodos(string usuarioEmail)
         {
-            IEnumerable<CarritoItem> items = itemsDelCarrito(userEmail);
+            IEnumerable<CarritoItem> items = itemsDelCarrito(usuarioEmail);
             foreach(var item in items)
             {
                 db.CarritoItems.Remove(item);
             }
             db.SaveChanges();
-            return RedirectToAction("Index", new { userEmail = userEmail });
+            return RedirectToAction("Index", new { usuarioEmail = usuarioEmail });
+        }
+
+        public ActionResult FinalizarCompra(string usuarioEmail)
+        {
+            Orden orden = new Orden()
+            {
+                UsuarioEmail = usuarioEmail,
+                FechaCompra = DateTime.Now,
+            };
+            db.Ordenes.Add(orden);
+            db.SaveChanges();
+            agregarItemsDelCarritoALaOrden(usuarioEmail, orden.OrdenId);
+            return View("Gracias");
         }
     }
 }

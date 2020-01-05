@@ -12,19 +12,19 @@ namespace OnlineStore.Models
         private int productoId;
         private Producto producto;
         private int cantidad;
-        private string userEmail;
+        private string usuarioEmail;
 
         public int CarritoItemId { get => carritoItemId; set => carritoItemId = value; }
         public int ProductoId { get => productoId; set => productoId = value; }
         public virtual Producto Producto { get => producto; set => producto = value; }
         public int Cantidad { get => cantidad; set => cantidad = value; }
         [NotMapped]
-        public int Subtotal { get => obtenerSubtotal(producto, cantidad); }
-        public string UserEmail { get => userEmail; set => userEmail = value; }
+        public int Subtotal { get => obtenerSubtotal(); }
+        public string UsuarioEmail { get => usuarioEmail; set => usuarioEmail = value; }
 
-        private int obtenerSubtotal(Producto producto, int cantidad)
+        private int obtenerSubtotal()
         {
-            return producto.Precio * cantidad;
+            return Producto.Precio * Cantidad;
         } 
     }
 }

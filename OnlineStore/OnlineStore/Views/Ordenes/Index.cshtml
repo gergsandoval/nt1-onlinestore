@@ -1,0 +1,40 @@
+﻿@model IEnumerable<OnlineStore.Models.Orden>
+
+@{
+    ViewBag.Title = "Lista de Ordenes";
+}
+
+<h2>Lista de Ordenes</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.UsuarioEmail)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaCompra)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Total)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.UsuarioEmail)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.FechaCompra)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Total)
+    </td>
+    <td>
+        @Html.ActionLink("Detalles", "Details", new { id = item.OrdenId })
+    </td>
+</tr>
+}
+
+</table>

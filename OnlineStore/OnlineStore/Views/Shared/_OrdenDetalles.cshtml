@@ -1,0 +1,47 @@
+﻿@model OnlineStore.Models.Orden
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Detalles.SingleOrDefault().Producto.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Detalles.SingleOrDefault().Producto.Precio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Detalles.SingleOrDefault().Cantidad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Detalles.SingleOrDefault().Subtotal)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.Detalles)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Producto.Nombre)
+                </td>
+                <td>
+                    $@Html.DisplayFor(modelItem => item.Producto.Precio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cantidad)
+                </td>
+                <td>
+                    $@Html.DisplayFor(modelItem => item.Subtotal)
+                </td>
+                <th></th>
+            </tr>
+        }
+
+        <tr>
+            <td></td>
+            <td></td>
+            <td>@Html.DisplayNameFor(model => model.Total)</td>
+            <td>$@Html.DisplayFor(model => model.Total)</td>
+            <th></th>
+        </tr>
+
+    </table>
