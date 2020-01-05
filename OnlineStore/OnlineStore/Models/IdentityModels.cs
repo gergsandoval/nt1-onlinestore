@@ -29,5 +29,7 @@ namespace OnlineStore.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<OnlineStore.Models.Categoria> Categorias { get; set; }
     }
 }

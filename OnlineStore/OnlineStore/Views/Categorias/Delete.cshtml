@@ -1,0 +1,31 @@
+﻿@model OnlineStore.Models.Categoria
+
+@{
+    ViewBag.Title = "Borrar";
+}
+
+    <h2>Borrar</h2>
+
+<h3>¿Esta seguro que desea borrar esta categoria?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Borrar" class="btn btn-default" /> |
+            @Html.ActionLink("Volver a la lista", "Index")
+        </div>
+    }
+</div>
