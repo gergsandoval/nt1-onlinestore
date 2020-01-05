@@ -1,9 +1,31 @@
-﻿
+﻿@model OnlineStore.Models.Orden
+
 @{
-    ViewBag.Title = "Gracias";
+    ViewBag.Title = "Gracias por su compra";
 }
 
-<h2>Gracias por su Compra</h2>
+<h2>@ViewBag.Title</h2>
 
-@Html.ActionLink("Volver a la pagina principal", "Index", "Home")
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UsuarioEmail)
+        </dt>
 
+        <dd>
+            @Html.DisplayFor(model => model.UsuarioEmail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaCompra)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaCompra)
+        </dd>
+    </dl>
+</div>
+@Html.Partial("_OrdenDetalles", Model)
+
+<div>@Html.ActionLink("Volver a la pagina principal","Index", "Home")</div>

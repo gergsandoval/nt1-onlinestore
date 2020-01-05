@@ -165,7 +165,20 @@ namespace OnlineStore.Controllers
             db.Ordenes.Add(orden);
             db.SaveChanges();
             agregarItemsDelCarritoALaOrden(usuarioEmail, orden.OrdenId);
-            return View("Gracias");
+            return RedirectToAction("Gracias", new { id = orden.OrdenId });
+        }
+        public ActionResult Gracias(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Orden orden = db.Ordenes.Find(id);
+            if (orden == null)
+            {
+                return HttpNotFound();
+            }
+            return View(orden);
         }
     }
 }

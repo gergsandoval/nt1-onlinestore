@@ -4,7 +4,7 @@
     ViewBag.Title = "Detalles";
 }
 
-<h2>Detalles</h2>
+<h2>@ViewBag.Title</h2>
 
 <div>
     <hr />
@@ -26,7 +26,4 @@
         </dd>
     </dl>
 </div>
-@Html.Partial("_OrdenDetalles",Model)
-<p>
-    @Html.ActionLink("Volver a Lista", "Index")
-</p>
+@Html.Partial("_OrdenDetalles", Model)

@@ -22,7 +22,6 @@ namespace OnlineStore.Controllers
             return View(ordenes);
         }
 
-        // GET: Ordenes/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
