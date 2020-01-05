@@ -1,0 +1,48 @@
+﻿@model IEnumerable<OnlineStore.Models.CarritoItem>
+
+@{
+    ViewBag.Title = "Carrito";
+}
+
+<h2>Carrito</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Producto.Nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Producto.Precio)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cantidad)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Subtotal)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Producto.Nombre)
+    </td>
+    <td>
+        $@Html.DisplayFor(modelItem => item.Producto.Precio)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Cantidad)
+    </td>
+    <td>
+        $@Html.DisplayFor(modelItem => item.Subtotal)
+    </td>
+    <td>
+        @Html.ActionLink("Sumar 1", "Edit", new { id = item.CarritoItemId }) |
+        @Html.ActionLink("Restar 1", "Details", new { id = item.CarritoItemId }) |
+        @Html.ActionLink("Borrar", "Delete", new { id = item.CarritoItemId })
+    </td>
+</tr>
+}
+
+</table>

@@ -172,6 +172,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CarritoController.cs" />
     <Compile Include="Controllers\CategoriasController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProductosController.cs" />
@@ -190,13 +191,24 @@
     <Compile Include="Migrations\202001050644092_v2.Designer.cs">
       <DependentUpon>202001050644092_v2.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202001050657319_v3.cs" />
-    <Compile Include="Migrations\202001050657319_v3.Designer.cs">
-      <DependentUpon>202001050657319_v3.cs</DependentUpon>
+    <Compile Include="Migrations\202001050728304_v3.cs" />
+    <Compile Include="Migrations\202001050728304_v3.Designer.cs">
+      <DependentUpon>202001050728304_v3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001050753573_v4.cs" />
+    <Compile Include="Migrations\202001050753573_v4.Designer.cs">
+      <DependentUpon>202001050753573_v4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001050805510_v5.cs" />
+    <Compile Include="Migrations\202001050805510_v5.Designer.cs">
+      <DependentUpon>202001050805510_v5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001050809085_v6.cs" />
+    <Compile Include="Migrations\202001050809085_v6.Designer.cs">
+      <DependentUpon>202001050809085_v6.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\Carrito.cs" />
     <Compile Include="Models\CarritoItem.cs" />
     <Compile Include="Models\Categoria.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -252,6 +264,8 @@
     <Content Include="Views\Productos\Delete.cshtml" />
     <Content Include="Views\Productos\Edit.cshtml" />
     <Content Include="Views\Productos\Index.cshtml" />
+    <Content Include="Views\Carrito\Index.cshtml" />
+    <Content Include="Views\Shared\_Productos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202001050548235_InitialCreate.resx">
@@ -263,8 +277,17 @@
     <EmbeddedResource Include="Migrations\202001050644092_v2.resx">
       <DependentUpon>202001050644092_v2.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001050657319_v3.resx">
-      <DependentUpon>202001050657319_v3.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202001050728304_v3.resx">
+      <DependentUpon>202001050728304_v3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001050753573_v4.resx">
+      <DependentUpon>202001050753573_v4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001050805510_v5.resx">
+      <DependentUpon>202001050805510_v5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001050809085_v6.resx">
+      <DependentUpon>202001050809085_v6.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -280,6 +303,7 @@
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

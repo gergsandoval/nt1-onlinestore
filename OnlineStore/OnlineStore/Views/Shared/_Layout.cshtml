@@ -23,6 +23,7 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Categorias", "Index", "Categorias")</li>
                     <li>@Html.ActionLink("Productos", "Index", "Productos")</li>
+                    <li>@Html.ActionLink("Carrito", "Index", "Carrito", new { userEmail = User.Identity.Name }, null)</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
