@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Carrito";
+    int total = 0;
 }
 
 <h2>Carrito</h2>
@@ -23,26 +24,38 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.Producto.Nombre)
-    </td>
-    <td>
-        $@Html.DisplayFor(modelItem => item.Producto.Precio)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Cantidad)
-    </td>
-    <td>
-        $@Html.DisplayFor(modelItem => item.Subtotal)
-    </td>
-    <td>
-        @Html.ActionLink("Sumar 1", "Edit", new { id = item.CarritoItemId }) |
-        @Html.ActionLink("Restar 1", "Details", new { id = item.CarritoItemId }) |
-        @Html.ActionLink("Borrar", "Delete", new { id = item.CarritoItemId })
-    </td>
-</tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Producto.Nombre)
+            </td>
+            <td>
+                $@Html.DisplayFor(modelItem => item.Producto.Precio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cantidad)
+            </td>
+            <td>
+                $@Html.DisplayFor(modelItem => item.Subtotal)
+            </td>
+            @{ total += item.Subtotal;}
+            <td>
+                @Html.ActionLink("Sumar 1", "SumarUno", new { carritoItemId = item.CarritoItemId }) |
+                @Html.ActionLink("Restar 1", "RestarUno", new { carritoItemId = item.CarritoItemId }) |
+                @Html.ActionLink("Borrar", "BorrarUno", new { carritoItemId = item.CarritoItemId })
+            </td>
+            <th></th>
+        </tr>
+    }
 
+    <tr>
+        <td></td>
+        <td></td>
+        <td>Total</td>
+        <td>$@total</td>
+        <td>Finalizar Compra | @Html.ActionLink("Seguir Comprando","Index", "Home")</td>
+        <th></th>
+    </tr>
 </table>
+<div>@Html.ActionLink("Borrar Todos", "BorrarTodos", new { userEmail = User.Identity.Name })</div>

@@ -10,6 +10,7 @@ using OnlineStore.Models;
 
 namespace OnlineStore.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ProductosController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

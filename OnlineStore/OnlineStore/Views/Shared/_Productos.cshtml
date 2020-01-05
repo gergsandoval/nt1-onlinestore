@@ -1,4 +1,6 @@
 ﻿@model IEnumerable<OnlineStore.Models.Producto>
+
+<h4>Nuestros Productos</h4>
 <table class="table">
     <tr>
         <th>
@@ -33,7 +35,7 @@
         <td>
             @if (item.Stock > 0)
             {
-                @Html.ActionLink("Agregar al carrito", "Agregar", "Carrito", new { productoId = item.ProductoId }, null)
+                @Html.ActionLink("Agregar al carrito", "AgregarItem", "Carrito", new { productoId = item.ProductoId }, null)
             }
             else
             {
