@@ -17,7 +17,16 @@ namespace OnlineStore.Controllers
         // GET: Carrito
         public ActionResult Index(string userEmail)
         {
-            return View(db.CarritoItems.Where(x => x.UserEmail == userEmail).ToList());
+            List<CarritoItem> items;
+            if (userEmail != null)
+            {
+                items = db.CarritoItems.Where(x => x.UserEmail == userEmail).ToList();
+            }
+            else
+            {
+                items = db.CarritoItems.Where(x => x.UserEmail == "").ToList();
+            }
+            return View(items);
         }
 
         public ActionResult Agregar(int? productoId)
