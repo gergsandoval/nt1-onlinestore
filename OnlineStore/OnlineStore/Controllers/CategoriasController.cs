@@ -20,21 +20,6 @@ namespace OnlineStore.Controllers
             return View(db.Categorias.ToList());
         }
 
-        // GET: Categorias/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Categoria categoria = db.Categorias.Find(id);
-            if (categoria == null)
-            {
-                return HttpNotFound();
-            }
-            return View(categoria);
-        }
-
         // GET: Categorias/Create
         public ActionResult Create()
         {
