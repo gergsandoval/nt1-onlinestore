@@ -81,7 +81,7 @@ namespace OnlineStore.Controllers
             }
             else
             {
-                ModelState.AddModelError("", "Combinacion de Usuario/Contraseña incorrecta.");
+                ModelState.AddModelError("", "Combinacion de Email/Contraseña incorrecta.");
                 return View(model);
             }
         }
