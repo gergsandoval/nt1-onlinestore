@@ -10,15 +10,20 @@ using OnlineStore.Models;
 
 namespace OnlineStore.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class OrdenesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Ordenes
-        public ActionResult Index()
+        public ActionResult Index(string usuarioEmail)
         {
-            var ordenes = db.Ordenes.ToList();
+            var ordenes = db.Ordenes.Where(x => x.UsuarioEmail == usuarioEmail).ToList();
+            if (User.IsInRole("Admin"))
+            {
+                
+                ordenes = db.Ordenes.ToList();
+            }
             return View(ordenes);
         }
 

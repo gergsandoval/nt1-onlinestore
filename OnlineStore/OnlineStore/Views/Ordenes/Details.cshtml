@@ -27,3 +27,5 @@
     </dl>
 </div>
 @Html.Partial("_OrdenDetalles", Model)
+
+<div>@Html.ActionLink("Volver a la lista", "Index", "Ordenes", new { usuarioEmail = Model.UsuarioEmail}, null)</div>
