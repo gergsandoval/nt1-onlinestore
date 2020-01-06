@@ -17,15 +17,7 @@ namespace OnlineStore.Controllers
         // GET: Carrito
         public ActionResult Index(string usuarioEmail)
         {
-            IEnumerable<CarritoItem> items;
-            if (usuarioEmail != null)
-            {
-                items = db.CarritoItems.Where(x => x.UsuarioEmail == usuarioEmail).ToList();
-            }
-            else
-            {
-                items = db.CarritoItems.Where(x => x.UsuarioEmail == "").ToList();
-            }
+            IEnumerable<CarritoItem> items = itemsDelCarrito(usuarioEmail);
             return View(items);
         }
 
@@ -64,7 +56,7 @@ namespace OnlineStore.Controllers
             }
             else
             {
-                items = db.CarritoItems.Where(x => x.UsuarioEmail == "").ToList();
+                items = obtenerItemsHuerfanos();
             }
             return items;
         }
@@ -77,8 +69,8 @@ namespace OnlineStore.Controllers
                 OrdenDetalle ordenDetalle = crearOrdenDetalle(item, orderId);
                 db.OrdenDetalle.Add(ordenDetalle);
                 db.CarritoItems.Remove(item);
-                db.SaveChanges();
             }
+            db.SaveChanges();
         }
 
         private OrdenDetalle crearOrdenDetalle(CarritoItem item, int orderId)
@@ -154,9 +146,15 @@ namespace OnlineStore.Controllers
             db.SaveChanges();
             return RedirectToAction("Index", new { usuarioEmail = usuarioEmail });
         }
-
+        [Authorize]
         public ActionResult FinalizarCompra(string usuarioEmail)
         {
+            //Si el usuarioEmail llega null significa que la compra la hizo un guest
+            if (usuarioEmail == null)
+            {
+                usuarioEmail = User.Identity.Name;
+                actualizarItemsHuerfanos(usuarioEmail);
+            }
             Orden orden = new Orden()
             {
                 UsuarioEmail = usuarioEmail,
@@ -179,6 +177,21 @@ namespace OnlineStore.Controllers
                 return HttpNotFound();
             }
             return View(orden);
+        }
+
+        private IEnumerable<CarritoItem> obtenerItemsHuerfanos()
+        {
+            return db.CarritoItems.Where(x => x.UsuarioEmail == "").ToList();
+        }
+        private void actualizarItemsHuerfanos(string usuarioEmail)
+        {
+            IEnumerable<CarritoItem> items = obtenerItemsHuerfanos();
+            foreach (var item in items)
+            {
+                item.UsuarioEmail = User.Identity.Name;
+                db.Entry(item).State = EntityState.Modified;
+            }
+            db.SaveChanges();
         }
     }
 }

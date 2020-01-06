@@ -52,11 +52,10 @@ namespace OnlineStore.Controllers
             }
         }
 
-        //
-        // GET: /Account/Login
         [AllowAnonymous]
-        public ActionResult Login()
+        public ActionResult Login(string returnUrl)
         {
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
@@ -65,7 +64,7 @@ namespace OnlineStore.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model)
+        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
@@ -77,13 +76,13 @@ namespace OnlineStore.Controllers
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, false, shouldLockout: false);
             if (result == SignInStatus.Success)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToLocal(returnUrl);
             }
             else
             {
-                ModelState.AddModelError("", "Combinacion de Email/Contraseña incorrecta.");
+                ModelState.AddModelError("", "Combinacion de Email/Contraseña incorrecta");
                 return View(model);
-            }
+            }        
         }
 
         //
