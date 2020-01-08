@@ -14,7 +14,6 @@ namespace OnlineStore.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Carrito
         public ActionResult Index(string usuarioEmail)
         {
             IEnumerable<CarritoItem> items = itemsDelCarrito(usuarioEmail);
@@ -44,7 +43,8 @@ namespace OnlineStore.Controllers
 
         private CarritoItem itemExistente(int? productoId, string usuarioEmail)
         {
-            return db.CarritoItems.Where(x => x.ProductoId == productoId && x.UsuarioEmail == usuarioEmail).SingleOrDefault();
+            return db.CarritoItems.Where(x => x.ProductoId == productoId && x.UsuarioEmail == usuarioEmail)
+                                  .SingleOrDefault();
         }
 
         private IEnumerable<CarritoItem> itemsDelCarrito(string usuarioEmail)
@@ -61,23 +61,23 @@ namespace OnlineStore.Controllers
             return items;
         }
 
-        private void agregarItemsDelCarritoALaOrden(string usuarioEmail, int orderId)
+        private List<OrdenDetalle> generarOrdenDetalles(string usuarioEmail)
         {
-            IEnumerable<CarritoItem> items = itemsDelCarrito(usuarioEmail);
-            foreach (var item in items)
+            IEnumerable<CarritoItem> itemsCarrito = itemsDelCarrito(usuarioEmail);
+            List<OrdenDetalle> itemsOrden = new List<OrdenDetalle>();
+            foreach (var item in itemsCarrito)
             {
-                OrdenDetalle ordenDetalle = crearOrdenDetalle(item, orderId);
-                db.OrdenDetalle.Add(ordenDetalle);
+                OrdenDetalle ordenDetalle = crearOrdenDetalle(item);
+                itemsOrden.Add(ordenDetalle);
                 db.CarritoItems.Remove(item);
             }
-            db.SaveChanges();
+            return itemsOrden;
         }
 
-        private OrdenDetalle crearOrdenDetalle(CarritoItem item, int orderId)
+        private OrdenDetalle crearOrdenDetalle(CarritoItem item)
         {
             return new OrdenDetalle()
             {
-                OrdenId = orderId,
                 ProductoId = item.ProductoId,
                 Cantidad = item.Cantidad,
             };
@@ -159,10 +159,10 @@ namespace OnlineStore.Controllers
             {
                 UsuarioEmail = usuarioEmail,
                 FechaCompra = DateTime.Now,
+                Detalles = generarOrdenDetalles(usuarioEmail),
             };
             db.Ordenes.Add(orden);
             db.SaveChanges();
-            agregarItemsDelCarritoALaOrden(usuarioEmail, orden.OrdenId);
             return RedirectToAction("Gracias", new { id = orden.OrdenId });
         }
         public ActionResult Gracias(int? id)
