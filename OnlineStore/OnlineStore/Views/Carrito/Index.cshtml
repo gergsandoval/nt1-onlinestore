@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Carrito";
     int total = 0;
+    int carritoItems = Model.Count();
 }
 
 <h2>Carrito</h2>
@@ -54,8 +55,19 @@
     <td></td>
     <td>Total</td>
     <td>$@total</td>
-    <td>@Html.ActionLink("Finalizar Compra", "FinalizarCompra", new { usuarioEmail = User.Identity.Name }) | @Html.ActionLink("Seguir Comprando", "Index", "Home")</td>
+    @if (carritoItems > 0)
+    {
+<td>@Html.ActionLink("Seguir Comprando", "Index", "Home") | @Html.ActionLink("Finalizar Compra", "FinalizarCompra", new { usuarioEmail = User.Identity.Name })</td>
+    }
+    else
+    {
+        <td>@Html.ActionLink("Seguir Comprando", "Index", "Home")</td>
+    }
+
     <th></th>
 </tr>
 </table>
-<div>@Html.ActionLink("Borrar Todos", "BorrarTodos", new { usuarioEmail = User.Identity.Name })</div>
+@if (carritoItems > 0)
+{
+    <div>@Html.ActionLink("Borrar Todos", "BorrarTodos", new { usuarioEmail = User.Identity.Name })</div>
+}

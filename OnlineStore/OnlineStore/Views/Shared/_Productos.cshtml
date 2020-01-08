@@ -18,31 +18,33 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Categoria.Nombre)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Nombre)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Descripcion)
-        </td>
-        <td>
-            $@Html.DisplayFor(modelItem => item.Precio)
-        </td>
-        <td>
-            @if (item.Stock > 0)
-            {
-                @Html.ActionLink("Agregar al carrito", "AgregarItem", "Carrito", new { productoId = item.ProductoId }, null)
-            }
-            else
-            {
-                <div>Sin Stock</div>
-            }
-        </td>
-    </tr>
-}
-
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Categoria.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+            <td>
+                $@Html.DisplayFor(modelItem => item.Precio)
+            </td>
+            <td>
+                @if (item.Stock > 0)
+                {
+                    @Html.ActionLink("Agregar al carrito", "AgregarItem", "Carrito", new { productoId = item.ProductoId }, null)
+                }
+                else
+                {
+                    <div>Sin Stock</div>
+                }
+            </td>
+        </tr>
+    }
 </table>
+
+
