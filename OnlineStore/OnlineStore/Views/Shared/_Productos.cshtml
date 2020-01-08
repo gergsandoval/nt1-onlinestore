@@ -35,7 +35,7 @@
         <td>
             @if (item.Stock > 0)
             {
-                @Html.ActionLink("Agregar al carrito", "AgregarItem", "Carrito", new { productoId = item.ProductoId }, null)
+                @Html.ActionLink("Agregar al carrito", "AgregarItem", "Carrito", new { productoId = item.ProductoId, usuarioEmail = User.Identity.Name }, null)
             }
             else
             {

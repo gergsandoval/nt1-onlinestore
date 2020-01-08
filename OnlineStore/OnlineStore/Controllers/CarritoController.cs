@@ -20,16 +20,18 @@ namespace OnlineStore.Controllers
             return View(items);
         }
 
-        public ActionResult AgregarItem(int? productoId)
+        public ActionResult AgregarItem(int? productoId, string usuarioEmail)
         {
-            string usuarioEmail = User.Identity.Name;
             if (productoId != null)
             {
                 CarritoItem item = itemExistente(productoId, usuarioEmail);
                 if (item == null)
                 {
                     item = crearItem(productoId);
-                    db.CarritoItems.Add(item);
+                    if (item != null)
+                    {
+                        db.CarritoItems.Add(item);
+                    }
                 }
                 else
                 {
@@ -85,12 +87,17 @@ namespace OnlineStore.Controllers
 
         private CarritoItem crearItem(int? productoId)
         {
-                return new CarritoItem()
+            CarritoItem item = null;
+            if (productoId != null)
+            {
+                item = new CarritoItem()
                 {
                     Producto = db.Productos.Find(productoId),
                     Cantidad = 1,
                     UsuarioEmail = User.Identity.Name,
-                };     
+                };
+            }
+            return item;
         }
 
         public ActionResult SumarUno(int? carritoItemId)
@@ -109,7 +116,6 @@ namespace OnlineStore.Controllers
         {
             if (carritoItemId != null)
             {
-                
                 CarritoItem item = db.CarritoItems.Find(carritoItemId);
                 if (item.Cantidad > 1)
                 {
