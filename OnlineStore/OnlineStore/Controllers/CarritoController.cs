@@ -20,25 +20,23 @@ namespace OnlineStore.Controllers
             return View(items);
         }
 
-        public ActionResult AgregarItem(int? productoId, string usuarioEmail)
+        public ActionResult AgregarItem(int? productoId)
         {
+            string usuarioEmail = User.Identity.Name;
             if (productoId != null)
             {
                 CarritoItem item = itemExistente(productoId, usuarioEmail);
                 if (item == null)
                 {
                     item = crearItem(productoId);
-                    if (item != null)
-                    {
-                        db.CarritoItems.Add(item);
-                    }
+                    db.CarritoItems.Add(item);
                 }
                 else
                 {
                     item.Cantidad++;
                     db.Entry(item).State = EntityState.Modified;
                 }
-                db.SaveChanges(); 
+                db.SaveChanges();
             }
             return RedirectToAction("Index", new { usuarioEmail = usuarioEmail });
         }
@@ -87,17 +85,12 @@ namespace OnlineStore.Controllers
 
         private CarritoItem crearItem(int? productoId)
         {
-            CarritoItem item = null;
-            if (productoId != null)
-            {
-                item = new CarritoItem()
+                return new CarritoItem()
                 {
                     Producto = db.Productos.Find(productoId),
                     Cantidad = 1,
                     UsuarioEmail = User.Identity.Name,
-                };
-            }
-            return item;
+                };     
         }
 
         public ActionResult SumarUno(int? carritoItemId)
@@ -116,6 +109,7 @@ namespace OnlineStore.Controllers
         {
             if (carritoItemId != null)
             {
+                
                 CarritoItem item = db.CarritoItems.Find(carritoItemId);
                 if (item.Cantidad > 1)
                 {
