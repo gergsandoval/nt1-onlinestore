@@ -187,6 +187,10 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+
+#alinearDerecha{
+    float: right;
+}
 td,
 th {
   padding: 0;
@@ -5023,11 +5027,18 @@ a.badge:focus {
   margin-left: 3px;
 }
 .jumbotron {
-  padding-top: 30px;
-  padding-bottom: 30px;
-  margin-bottom: 30px;
-  color: inherit;
-  background-color: #eeeeee;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    color: inherit;
+    background-color: #eeeeee;
+    background-image: url('/Imagenes/fondo.jpg');
+    width: 1100px;
+    height: 200px;
+    margin-left: auto;
+    display: block;
+    margin-right: auto;
 }
 .jumbotron h1,
 .jumbotron .h1 {
