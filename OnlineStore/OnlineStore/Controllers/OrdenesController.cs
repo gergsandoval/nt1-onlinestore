@@ -16,9 +16,9 @@ namespace OnlineStore.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Ordenes
-        public ActionResult Index(string usuarioEmail)
+        public ActionResult Index()
         {
-            var ordenes = db.Ordenes.Where(x => x.UsuarioEmail == usuarioEmail).ToList();
+            var ordenes = db.Ordenes.Where(x => x.UsuarioEmail == User.Identity.Name).ToList();
             if (User.IsInRole("Admin"))
             {
                 

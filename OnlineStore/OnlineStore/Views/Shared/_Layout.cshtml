@@ -26,16 +26,20 @@
                         <li>@Html.ActionLink("Categorias", "Index", "Categorias")</li>
                         <li>@Html.ActionLink("Productos", "Index", "Productos")</li>
                     }
-                    <li>@Html.ActionLink("Carrito", "Index", "Carrito", new { usuarioEmail = User.Identity.Name }, null)</li>
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li>@Html.ActionLink("Ordenes", "Index", "Ordenes", new { usuarioEmail = User.Identity.Name }, null)</li>
+                        <li>@Html.ActionLink("Ordenes", "Index", "Ordenes")</li>
                     }
 
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
+    </div>
+    <div id="carritoDeCompras">
+        <a href="@Url.Action("Index","Carrito")">
+            <img src="~/Imagenes/carrito.png" />
+        </a>
     </div>
     <div class="container body-content">
         @RenderBody()

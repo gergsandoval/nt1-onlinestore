@@ -35,17 +35,17 @@
                 $@Html.DisplayFor(modelItem => item.Producto.Precio)
             </td>
             <td>
+                <button class="btn btn-primary btn-xs">@Html.ActionLink("-", "RestarUno", new { carritoItemId = item.CarritoItemId })</button>
                 @Html.DisplayFor(modelItem => item.Cantidad)
+                <button class="btn btn-primary btn-xs">@Html.ActionLink("+", "SumarUno", new { carritoItemId = item.CarritoItemId }) </button>
             </td>
             <td>
                 $@Html.DisplayFor(modelItem => item.Subtotal)
             </td>
             @{ total += item.Subtotal;}
-            <td>
-                @Html.ActionLink("Sumar 1", "SumarUno", new { carritoItemId = item.CarritoItemId }) |
-                @Html.ActionLink("Restar 1", "RestarUno", new { carritoItemId = item.CarritoItemId }) |
-                @Html.ActionLink("Borrar", "BorrarUno", new { carritoItemId = item.CarritoItemId })
-            </td>
+        <td>
+            <button class="btn btn-danger btn-xs">@Html.ActionLink("Eliminar", "BorrarUno", new { carritoItemId = item.CarritoItemId }) </button>
+        </td>
             <th></th>
         </tr>
     }
@@ -57,11 +57,12 @@
     <td>$@total</td>
     @if (carritoItems > 0)
     {
-<td>@Html.ActionLink("Seguir Comprando", "Index", "Home") | @Html.ActionLink("Finalizar Compra", "FinalizarCompra", new { usuarioEmail = User.Identity.Name })</td>
+        <td> <button class="btn btn-primary btn-xs">@Html.ActionLink("Seguir Comprando", "Index", "Home") </button>
+        <button class="btn btn-success btn-xs">@Html.ActionLink("Finalizar Compra", "FinalizarCompra", new { usuarioEmail = User.Identity.Name })</button></td>
     }
     else
     {
-        <td>@Html.ActionLink("Seguir Comprando", "Index", "Home")</td>
+        <td><button class="btn btn-primary btn-xs">@Html.ActionLink("Seguir Comprando", "Index", "Home")</button></td>
     }
 
     <th></th>
@@ -69,5 +70,7 @@
 </table>
 @if (carritoItems > 0)
 {
-    <div>@Html.ActionLink("Borrar Todos", "BorrarTodos", new { usuarioEmail = User.Identity.Name })</div>
+    <div>
+    <button class="btn btn-danger">@Html.ActionLink("Vaciar Carrito", "BorrarTodos", new { usuarioEmail = User.Identity.Name })</button>
+    </div>
 }

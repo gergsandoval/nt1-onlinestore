@@ -7,7 +7,7 @@
 <h2>Lista de Categorias </h2>
 
 <p>
-    @Html.ActionLink("Crear", "Create")
+    <button class="btn btn-primary"> @Html.ActionLink("Crear", "Create") </button>
 </p>
 <table class="table">
     <tr>
@@ -23,9 +23,9 @@
             @Html.DisplayFor(modelItem => item.Nombre)
         </td>
         <td>
-            @Html.ActionLink("Editar", "Edit", new { id=item.CategoriaId }) |
-            @Html.ActionLink("Borrar", "Delete", new { id=item.CategoriaId })
-        </td>
+            <button class="btn btn-warning btn-xs">@Html.ActionLink("Editar", "Edit", new { id=item.CategoriaId }) </button>
+            <button class="btn btn-danger btn-xs">@Html.ActionLink("Borrar", "Delete", new { id = item.CategoriaId }) </button>
+</td>
     </tr>
 }
 
