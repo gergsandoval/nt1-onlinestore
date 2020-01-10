@@ -154,6 +154,7 @@ namespace OnlineStore.Controllers
                 usuarioEmail = User.Identity.Name;
                 actualizarItemsHuerfanos(usuarioEmail);
             }
+            descontarStock(usuarioEmail);
             Orden orden = new Orden()
             {
                 UsuarioEmail = usuarioEmail,
@@ -192,5 +193,18 @@ namespace OnlineStore.Controllers
             }
             db.SaveChanges();
         }
+
+        private void descontarStock(string usuarioEmail)
+        {
+            IEnumerable<CarritoItem> items = itemsDelCarrito(usuarioEmail);
+            foreach(var item in items)
+            {
+                Producto producto = db.Productos.Find(item.ProductoId);
+                producto.Stock -= item.Cantidad;
+                db.Entry(item).State = EntityState.Modified;
+            }
+            db.SaveChanges();
+        }
+       
     }
 }
