@@ -109,7 +109,6 @@ namespace OnlineStore.Controllers
         {
             if (carritoItemId != null)
             {
-                
                 CarritoItem item = db.CarritoItems.Find(carritoItemId);
                 if (item.Cantidad > 1)
                 {

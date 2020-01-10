@@ -7,6 +7,7 @@ using System.Web;
 
 namespace OnlineStore.Models
 {
+    [Table("Ordenes")]
     public class Orden
     {
         private int ordenId;

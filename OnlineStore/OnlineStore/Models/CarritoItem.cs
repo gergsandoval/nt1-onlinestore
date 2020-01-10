@@ -6,6 +6,7 @@ using System.Web;
 
 namespace OnlineStore.Models
 {
+    [Table("CarritoItems")]
     public class CarritoItem
     {
         private int carritoItemId;
