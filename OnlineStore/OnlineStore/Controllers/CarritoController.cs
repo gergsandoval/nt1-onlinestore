@@ -152,7 +152,9 @@ namespace OnlineStore.Controllers
             if (usuarioEmail == null)
             {
                 usuarioEmail = User.Identity.Name;
+                BorrarTodos(usuarioEmail); 
                 actualizarItemsHuerfanos(usuarioEmail);
+                return RedirectToAction("Index", new { usuarioEmail = usuarioEmail });
             }
             descontarStock(usuarioEmail);
             Orden orden = new Orden()
@@ -201,7 +203,7 @@ namespace OnlineStore.Controllers
             {
                 Producto producto = db.Productos.Find(item.ProductoId);
                 producto.Stock -= item.Cantidad;
-                db.Entry(item).State = EntityState.Modified;
+                db.Entry(producto).State = EntityState.Modified;
             }
             db.SaveChanges();
         }
