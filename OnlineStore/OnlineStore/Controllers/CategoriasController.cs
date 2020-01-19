@@ -34,14 +34,18 @@ namespace OnlineStore.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "CategoriaId,Nombre")] Categoria categoria)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && categoriaExistente(categoria.Nombre) == null)
             {
                 db.Categorias.Add(categoria);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
+            ModelState.AddModelError("Nombre", "No se puede agregar una categoria con el mismo nombre");
             return View(categoria);
+        }
+        private Categoria categoriaExistente(string nombre)
+        {
+            return db.Categorias.Where(x => x.Nombre.ToUpper() == nombre.ToUpper()).SingleOrDefault();
         }
 
         // GET: Categorias/Edit/5

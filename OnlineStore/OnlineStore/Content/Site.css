@@ -39,3 +39,7 @@ textarea {
     z-index: 3;
     cursor: pointer;
 }
+
+#stockSuperado {
+    color :red
+}

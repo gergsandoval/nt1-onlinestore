@@ -37,7 +37,7 @@
         </div>
     </div>
     <div id="carritoDeCompras">
-        <a href="@Url.Action("Index","Carrito")">
+        <a href="@Url.Action("Index", "Carrito", new { usuarioEmail = User.Identity.Name })">
             <img src="~/Imagenes/carrito.png" />
         </a>
     </div>

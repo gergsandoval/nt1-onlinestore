@@ -36,15 +36,21 @@ namespace OnlineStore.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ProductoId,Nombre,Descripcion,Stock,Precio,CategoriaId")] Producto producto)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && productoExistente(producto) == null)
             {
                 db.Productos.Add(producto);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
             ViewBag.CategoriaId = new SelectList(db.Categorias, "CategoriaId", "Nombre", producto.CategoriaId);
+            ModelState.AddModelError("Nombre", "No se puede agregar un producto con el mismo nombre dentro de la misma categoria");
             return View(producto);
+        }
+
+        private Producto productoExistente(Producto producto)
+        {
+            return db.Productos.Where(x => x.Nombre.ToUpper() == producto.Nombre.ToUpper() &&
+                                      x.CategoriaId == producto.CategoriaId).SingleOrDefault();
         }
 
         // GET: Productos/Edit/5

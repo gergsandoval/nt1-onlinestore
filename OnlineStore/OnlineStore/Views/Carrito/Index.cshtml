@@ -7,7 +7,7 @@
 }
 
 <h2>Carrito</h2>
-
+<h4 id="stockSuperado">@ViewBag.Error </h4>
 <table class="table">
     <tr>
         <th>
@@ -84,3 +84,10 @@
         <button class="btn btn-danger">@Html.ActionLink("Vaciar Carrito", "BorrarTodos", new { usuarioEmail = User.Identity.Name })</button>
     </div>
 }
+
+
+<style>
+    #stockSuperado {
+    color :red
+}
+</style>

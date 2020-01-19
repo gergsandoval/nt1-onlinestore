@@ -14,15 +14,20 @@ namespace OnlineStore.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        public ActionResult Index(string usuarioEmail)
+        public ActionResult Index(string usuarioEmail, bool? stockSuperado)
         {
             IEnumerable<CarritoItem> items = itemsDelCarrito(usuarioEmail);
+            if (stockSuperado.GetValueOrDefault(false))
+            {
+                ViewBag.Error = "No es posible agregar este item ya que nos quedamos sin stock";
+            }
             return View(items);
         }
 
         public ActionResult AgregarItem(int? productoId)
         {
             string usuarioEmail = User.Identity.Name;
+            bool stockSuperado = false;
             if (productoId != null)
             {
                 CarritoItem item = itemExistente(productoId, usuarioEmail);
@@ -31,6 +36,10 @@ namespace OnlineStore.Controllers
                     item = crearItem(productoId);
                     db.CarritoItems.Add(item);
                 }
+                else if (item.Producto.Stock == item.Cantidad)
+                {
+                    stockSuperado = true;
+                }
                 else
                 {
                     item.Cantidad++;
@@ -38,7 +47,7 @@ namespace OnlineStore.Controllers
                 }
                 db.SaveChanges();
             }
-            return RedirectToAction("Index", new { usuarioEmail = usuarioEmail });
+            return RedirectToAction("Index", new { usuarioEmail = usuarioEmail, stockSuperado = stockSuperado });
         }
 
         private CarritoItem itemExistente(int? productoId, string usuarioEmail)
