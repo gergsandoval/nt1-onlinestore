@@ -34,18 +34,19 @@ namespace OnlineStore.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "CategoriaId,Nombre")] Categoria categoria)
         {
-            if (ModelState.IsValid && categoriaExistente(categoria.Nombre) == null)
+            if (ModelState.IsValid && categoriaExistente(categoria) == null)
             {
                 db.Categorias.Add(categoria);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ModelState.AddModelError("Nombre", "No se puede agregar una categoria con el mismo nombre");
+            ModelState.AddModelError("Nombre", "Ya existe una categoria con el mismo nombre");
             return View(categoria);
         }
-        private Categoria categoriaExistente(string nombre)
+        private Categoria categoriaExistente(Categoria categoria)
         {
-            return db.Categorias.Where(x => x.Nombre.ToUpper() == nombre.ToUpper()).SingleOrDefault();
+            return db.Categorias.Where(x => x.Nombre.ToUpper() == categoria.Nombre.ToUpper() &&
+                                       x.CategoriaId != categoria.CategoriaId).SingleOrDefault();
         }
 
         // GET: Categorias/Edit/5
@@ -70,12 +71,13 @@ namespace OnlineStore.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "CategoriaId,Nombre")] Categoria categoria)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && categoriaExistente(categoria) == null)
             {
                 db.Entry(categoria).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ModelState.AddModelError("Nombre", "Ya existe una categoria con el mismo nombre");
             return View(categoria);
         }
 

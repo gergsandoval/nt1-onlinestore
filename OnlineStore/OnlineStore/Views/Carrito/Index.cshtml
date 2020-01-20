@@ -52,7 +52,7 @@
             </td>
             @{ total += item.Subtotal;}
             <td>
-                <button class="btn btn-danger btn-xs">@Html.ActionLink("Eliminar", "BorrarUno", new { carritoItemId = item.CarritoItemId }) </button>
+                <button class="btn btn-danger btn-xs">@Html.ActionLink("Borrar", "BorrarUno", new { carritoItemId = item.CarritoItemId }) </button>
             </td>
             <th></th>
         </tr>

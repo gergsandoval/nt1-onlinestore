@@ -39,6 +39,5 @@ namespace OnlineStore.Models
         public System.Data.Entity.DbSet<OnlineStore.Models.Orden> Ordenes { get; set; }
 
         public System.Data.Entity.DbSet<OnlineStore.Models.OrdenDetalle> OrdenDetalle { get; set; }
-
     }
 }

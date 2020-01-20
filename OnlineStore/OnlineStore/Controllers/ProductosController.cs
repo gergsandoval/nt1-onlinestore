@@ -43,14 +43,15 @@ namespace OnlineStore.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.CategoriaId = new SelectList(db.Categorias, "CategoriaId", "Nombre", producto.CategoriaId);
-            ModelState.AddModelError("Nombre", "No se puede agregar un producto con el mismo nombre dentro de la misma categoria");
+            ModelState.AddModelError("Nombre", "Ya existe un producto con el mismo nombre dentro de la categoria");
             return View(producto);
         }
 
         private Producto productoExistente(Producto producto)
         {
             return db.Productos.Where(x => x.Nombre.ToUpper() == producto.Nombre.ToUpper() &&
-                                      x.CategoriaId == producto.CategoriaId).SingleOrDefault();
+                                      x.CategoriaId == producto.CategoriaId && x.ProductoId != producto.ProductoId)
+                                      .SingleOrDefault();
         }
 
         // GET: Productos/Edit/5
@@ -76,13 +77,14 @@ namespace OnlineStore.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ProductoId,Nombre,Descripcion,Stock,Precio,CategoriaId")] Producto producto)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && productoExistente(producto) == null)
             {
                 db.Entry(producto).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
             ViewBag.CategoriaId = new SelectList(db.Categorias, "CategoriaId", "Nombre", producto.CategoriaId);
+            ModelState.AddModelError("Nombre", "Ya existe un producto con el mismo nombre dentro de la categoria");
             return View(producto);
         }
 

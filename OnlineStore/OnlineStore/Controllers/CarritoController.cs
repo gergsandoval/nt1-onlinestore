@@ -87,7 +87,8 @@ namespace OnlineStore.Controllers
         {
             return new OrdenDetalle()
             {
-                ProductoId = item.ProductoId,
+                NombreProducto = item.Producto.Nombre,
+                PrecioProducto = item.Producto.Precio,
                 Cantidad = item.Cantidad,
             };
         }

@@ -3,10 +3,10 @@
     <table class="table">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Detalles.SingleOrDefault().Producto.Nombre)
+                @Html.DisplayNameFor(model => model.Detalles.SingleOrDefault().NombreProducto)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Detalles.SingleOrDefault().Producto.Precio)
+                @Html.DisplayNameFor(model => model.Detalles.SingleOrDefault().PrecioProducto)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Detalles.SingleOrDefault().Cantidad)
@@ -21,10 +21,10 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Producto.Nombre)
+                    @Html.DisplayFor(modelItem => item.NombreProducto)
                 </td>
                 <td>
-                    $@Html.DisplayFor(modelItem => item.Producto.Precio)
+                    $@Html.DisplayFor(modelItem => item.PrecioProducto)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Cantidad)
