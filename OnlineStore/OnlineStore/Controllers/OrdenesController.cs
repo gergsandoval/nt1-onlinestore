@@ -21,7 +21,6 @@ namespace OnlineStore.Controllers
             var ordenes = db.Ordenes.Where(x => x.UsuarioEmail == User.Identity.Name).ToList();
             if (User.IsInRole("Admin"))
             {
-                
                 ordenes = db.Ordenes.ToList();
             }
             return View(ordenes);

@@ -29,7 +29,7 @@ namespace OnlineStore.Models
         [Range(0, 99999, ErrorMessage = "El {0} debe estar entre {1} y {2}")]
         public int Stock { get => stock; set => stock = value; }
         [Required(ErrorMessage = "El {0} es requerido")]
-        [Range(0, 99999, ErrorMessage = "El {0} debe estar entre {1} y {2}")]
+        [Range(1, 99999, ErrorMessage = "El {0} debe estar entre {1} y {2}")]
         public int Precio { get => precio; set => precio = value; }
         
         [Required(ErrorMessage = "La {0} es requerida")]
