@@ -32,7 +32,7 @@ namespace OnlineStore.Models
         [Range(0, 99999, ErrorMessage = "El {0} debe estar entre {1} y {2}")]
         public int Precio { get => precio; set => precio = value; }
         
-        [Required(ErrorMessage = "La {0} es requerido")]
+        [Required(ErrorMessage = "La {0} es requerida")]
         [Display(Name = "Categoria")]
         public int CategoriaId { get => categoriaId; set => categoriaId = value; }
         public virtual Categoria Categoria { get => categoria; set => categoria = value; }
