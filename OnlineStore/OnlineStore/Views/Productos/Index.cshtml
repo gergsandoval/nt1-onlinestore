@@ -44,7 +44,7 @@
             @Html.DisplayFor(modelItem => item.Stock)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Precio)
+            $@Html.DisplayFor(modelItem => item.Precio)
         </td>
         <td>
             <button class="btn btn-warning btn-xs">@Html.ActionLink("Editar", "Edit", new { id=item.ProductoId })</button>

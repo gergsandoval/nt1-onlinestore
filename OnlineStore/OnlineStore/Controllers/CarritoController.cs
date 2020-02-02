@@ -200,7 +200,7 @@ namespace OnlineStore.Controllers
             IEnumerable<CarritoItem> items = obtenerItemsHuerfanos();
             foreach (var item in items)
             {
-                item.UsuarioEmail = User.Identity.Name;
+                item.UsuarioEmail = usuarioEmail;
                 db.Entry(item).State = EntityState.Modified;
             }
             db.SaveChanges();
