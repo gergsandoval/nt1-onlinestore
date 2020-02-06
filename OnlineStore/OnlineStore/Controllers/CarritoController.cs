@@ -14,12 +14,16 @@ namespace OnlineStore.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        public ActionResult Index(string usuarioEmail, bool? stockSuperado)
+        public ActionResult Index(string usuarioEmail, bool? stockSuperado, bool? errorCompra)
         {
-            IEnumerable<CarritoItem> items = itemsDelCarrito(usuarioEmail);
+            IEnumerable<CarritoItem> items = obteneritemsDelCarrito(usuarioEmail);
             if (stockSuperado.GetValueOrDefault(false))
             {
-                ViewBag.Error = "No es posible agregar este item ya que nos quedamos sin stock";
+                ViewBag.Error = "El producto agregado se encuentra sin stock.";
+            }
+            else if (errorCompra.GetValueOrDefault(false))
+            {
+                ViewBag.Error = "La compra no pudo ser procesada debido que alguno de los articulos se encuentra sin stock.";
             }
             return View(items);
         }
@@ -33,10 +37,12 @@ namespace OnlineStore.Controllers
                 CarritoItem item = itemExistente(productoId, usuarioEmail);
                 if (item == null)
                 {
-                    item = crearItem(productoId);
+                    item = crearItem(productoId, usuarioEmail);
                     db.CarritoItems.Add(item);
+                    db.SaveChanges();
+                    return RedirectToAction("Index", new { usuarioEmail = usuarioEmail });
                 }
-                else if (item.Producto.Stock == item.Cantidad)
+                if (item.Producto.Stock - item.Cantidad <= 0)
                 {
                     stockSuperado = true;
                 }
@@ -44,8 +50,8 @@ namespace OnlineStore.Controllers
                 {
                     item.Cantidad++;
                     db.Entry(item).State = EntityState.Modified;
+                    db.SaveChanges();
                 }
-                db.SaveChanges();
             }
             return RedirectToAction("Index", new { usuarioEmail = usuarioEmail, stockSuperado = stockSuperado });
         }
@@ -56,7 +62,7 @@ namespace OnlineStore.Controllers
                                   .SingleOrDefault();
         }
 
-        private IEnumerable<CarritoItem> itemsDelCarrito(string usuarioEmail)
+        private IEnumerable<CarritoItem> obteneritemsDelCarrito(string usuarioEmail)
         {
             IEnumerable<CarritoItem> items;
             if (usuarioEmail != null)
@@ -72,7 +78,7 @@ namespace OnlineStore.Controllers
 
         private List<OrdenDetalle> generarOrdenDetalles(string usuarioEmail)
         {
-            IEnumerable<CarritoItem> itemsCarrito = itemsDelCarrito(usuarioEmail);
+            IEnumerable<CarritoItem> itemsCarrito = obteneritemsDelCarrito(usuarioEmail);
             List<OrdenDetalle> itemsOrden = new List<OrdenDetalle>();
             foreach (var item in itemsCarrito)
             {
@@ -93,13 +99,13 @@ namespace OnlineStore.Controllers
             };
         }
 
-        private CarritoItem crearItem(int? productoId)
+        private CarritoItem crearItem(int? productoId, string usuarioEmail)
         {
                 return new CarritoItem()
                 {
                     Producto = db.Productos.Find(productoId),
                     Cantidad = 1,
-                    UsuarioEmail = User.Identity.Name,
+                    UsuarioEmail = usuarioEmail,
                 };     
         }
 
@@ -147,7 +153,7 @@ namespace OnlineStore.Controllers
 
         public ActionResult BorrarTodos(string usuarioEmail)
         {
-            IEnumerable<CarritoItem> items = itemsDelCarrito(usuarioEmail);
+            IEnumerable<CarritoItem> items = obteneritemsDelCarrito(usuarioEmail);
             foreach(var item in items)
             {
                 db.CarritoItems.Remove(item);
@@ -166,16 +172,29 @@ namespace OnlineStore.Controllers
                 actualizarItemsHuerfanos(usuarioEmail);
                 return RedirectToAction("Index", new { usuarioEmail = usuarioEmail });
             }
-            descontarStock(usuarioEmail);
-            Orden orden = new Orden()
+            bool errorCompra = validarStock(usuarioEmail);
+            if (errorCompra)
+            {
+                return RedirectToAction("Index", new { usuarioEmail = usuarioEmail, errorCompra = errorCompra });
+            }
+            else
+            {
+                descontarStock(usuarioEmail);
+                Orden orden = crearOrden(usuarioEmail);
+                db.Ordenes.Add(orden);
+                db.SaveChanges();
+                return RedirectToAction("Gracias", new { id = orden.OrdenId });
+            }  
+        }
+
+        private Orden crearOrden(string usuarioEmail)
+        {
+            return new Orden()
             {
                 UsuarioEmail = usuarioEmail,
                 FechaCompra = DateTime.Now,
                 Detalles = generarOrdenDetalles(usuarioEmail),
             };
-            db.Ordenes.Add(orden);
-            db.SaveChanges();
-            return RedirectToAction("Gracias", new { id = orden.OrdenId });
         }
         public ActionResult Gracias(int? id)
         {
@@ -208,7 +227,7 @@ namespace OnlineStore.Controllers
 
         private void descontarStock(string usuarioEmail)
         {
-            IEnumerable<CarritoItem> items = itemsDelCarrito(usuarioEmail);
+            IEnumerable<CarritoItem> items = obteneritemsDelCarrito(usuarioEmail);
             foreach(var item in items)
             {
                 Producto producto = db.Productos.Find(item.ProductoId);
@@ -216,6 +235,26 @@ namespace OnlineStore.Controllers
                 db.Entry(producto).State = EntityState.Modified;
             }
             db.SaveChanges();
+        }
+
+        private bool validarStock(string usuarioEmail)
+        {
+            IEnumerable<CarritoItem> items = obteneritemsDelCarrito(usuarioEmail);
+            bool noHayStock = false;
+            int i = 0;
+            while (i < items.Count() && !noHayStock)
+            {
+                Producto producto = db.Productos.Find(items.ElementAt(i).ProductoId);
+                if (producto.Stock - items.ElementAt(i).Cantidad < 0)
+                {
+                    noHayStock = true;
+                }
+                else
+                {
+                    i++;
+                }
+            }
+            return noHayStock;
         }
        
     }
