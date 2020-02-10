@@ -37,13 +37,19 @@ namespace OnlineStore.Controllers
                 if (item == null)
                 {
                     item = crearItem(productoId, usuarioEmail);
+                    bool itemInexistente = item.Producto == null;
+                    if (itemInexistente)
+                    {
+                        string itemExistenteError = "El producto agregado no existe.";
+                        return RedirectToAction("Index", new { usuarioEmail = usuarioEmail, error = itemInexistente, descripcion = itemExistenteError });
+                    }
                     db.CarritoItems.Add(item);
                     db.SaveChanges();
                     return RedirectToAction("Index", new { usuarioEmail = usuarioEmail });
                 }
-                if (item.Producto.Stock - item.Cantidad <= 0)
+                bool stockSuperado = item.Producto.Stock - item.Cantidad <= 0;
+                if (stockSuperado)
                 {
-                    bool stockSuperado = true;
                     string stockSuperadoDescripcion = "El producto agregado se encuentra sin stock.";
                     return RedirectToAction("Index", new { usuarioEmail = usuarioEmail, error = stockSuperado, descripcion = stockSuperadoDescripcion });
                 }
@@ -115,7 +121,7 @@ namespace OnlineStore.Controllers
             if (carritoItemId != null)
             {
                 CarritoItem item = db.CarritoItems.Find(carritoItemId);
-                bool itemInexistente = item == null;
+                bool itemInexistente = item == null || !elProductoPerteneceAlCarrito(usuarioEmail, carritoItemId);
                 if (itemInexistente)
                 {
                     string itemExistenteError = "El producto modificado no existe.";
@@ -142,7 +148,7 @@ namespace OnlineStore.Controllers
             if (carritoItemId != null)
             {
                 CarritoItem item = db.CarritoItems.Find(carritoItemId);
-                bool itemInexistente = item == null;
+                bool itemInexistente = item == null || !elProductoPerteneceAlCarrito(usuarioEmail, carritoItemId);
                 if (itemInexistente)
                 {
                     string itemExistenteError = "El producto modificado no existe.";
@@ -167,7 +173,7 @@ namespace OnlineStore.Controllers
             if (carritoItemId != null)
             {
                 CarritoItem item = db.CarritoItems.Find(carritoItemId);
-                bool itemInexistente = item == null;
+                bool itemInexistente = item == null || !elProductoPerteneceAlCarrito(usuarioEmail, carritoItemId);
                 if (itemInexistente)
                 {
                     string itemExistenteError = "El producto borrado no existe.";
@@ -284,6 +290,27 @@ namespace OnlineStore.Controllers
                 }
             }
             return noHayStock;
+        }
+
+        private bool elProductoPerteneceAlCarrito(string usuarioEmail, int? carritoItemId)
+        {
+            IEnumerable<CarritoItem> items = obteneritemsDelCarrito(usuarioEmail);
+            bool encontreElProducto = false;
+            int i = 0;
+            while (i < items.Count() && !encontreElProducto)
+            {
+                var item = items.ElementAt(i);
+                if (item.CarritoItemId == carritoItemId)
+                {
+                    encontreElProducto = true;
+                }
+                else
+                {
+                    i++;
+                }
+            }
+            return encontreElProducto;
+
         }
        
     }

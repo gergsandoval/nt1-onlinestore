@@ -7,7 +7,7 @@ namespace OnlineStore.Models
     {
         [Required(ErrorMessage = "El {0} es obligatorio")]
         [Display(Name = "Email")]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "El {0} debe tener formato email")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "La {0} es obligatoria")]
@@ -19,7 +19,7 @@ namespace OnlineStore.Models
     public class RegisterViewModel
     {
         [Required(ErrorMessage = "El {0} es obligatorio")]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "El {0} debe tener formato email")]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
