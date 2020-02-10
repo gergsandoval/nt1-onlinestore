@@ -33,8 +33,9 @@
                     </div>
                 </div>
             }
-        <div> 
-            <button class="btn btn-primary"> @Html.ActionLink("Registrar un nuevo usuario", "Register", new { ReturnUrl = ViewBag.ReturnUrl }) </button>
+        <div>
+            <a href='@Url.Action("Register", new { ReturnUrl = ViewBag.ReturnUrl })'
+               class="btn btn-primary">Registrate</a>
         </div>
         </section>
     </div>

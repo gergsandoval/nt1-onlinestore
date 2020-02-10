@@ -37,13 +37,13 @@
             <td>
                 @{if (item.Cantidad > 1)
                     {
-                        <button class="btn btn-primary btn-xs">@Html.ActionLink("-", "RestarUno", new { carritoItemId = item.CarritoItemId, usuarioEmail = User.Identity.Name })</button>
+                        <a href='@Url.Action("RestarUno", new { carritoItemId = item.CarritoItemId, usuarioEmail = User.Identity.Name })'class="btn btn-primary btn-xs">-</a>
                     }
                 }
                 @Html.DisplayFor(modelItem => item.Cantidad)
                 @{ if (item.Producto.Stock > item.Cantidad)
                     {
-                        <button class="btn btn-primary btn-xs">@Html.ActionLink("+", "SumarUno", new { carritoItemId = item.CarritoItemId, usuarioEmail = User.Identity.Name }) </button>
+                        <a href='@Url.Action("SumarUno", new { carritoItemId = item.CarritoItemId, usuarioEmail = User.Identity.Name })' class="btn btn-primary btn-xs">+</a>
                     }
                 }
             </td>
@@ -52,7 +52,7 @@
             </td>
             @{ total += item.Subtotal;}
             <td>
-                <button class="btn btn-danger btn-xs">@Html.ActionLink("Borrar", "BorrarUno", new { carritoItemId = item.CarritoItemId, usuarioEmail = User.Identity.Name}) </button>
+                <a href='@Url.Action("BorrarUno", new { carritoItemId = item.CarritoItemId, usuarioEmail = User.Identity.Name })' class="btn btn-danger btn-xs">Eliminar</a>
             </td>
             <th></th>
         </tr>
@@ -65,14 +65,17 @@
         <td>$@total</td>
         @if (carritoItems > 0)
         {
-            <td>
-                <button class="btn btn-primary btn-xs">@Html.ActionLink("Seguir Comprando", "Index", "Home") </button>
-                <button class="btn btn-success btn-xs">@Html.ActionLink("Finalizar Compra", "FinalizarCompra", new { usuarioEmail = User.Identity.Name })</button>
-            </td>
+    <td>
+             <a href='@Url.Action("Index", "Home")' class="btn btn-primary btn-xs">Seguir Comprando</a>
+             <a href='@Url.Action("FinalizarCompra", new { usuarioEmail = User.Identity.Name })' class="btn btn-success btn-xs">Finalizar Compra</a>
+    </td>
         }
         else
         {
-            <td><button class="btn btn-primary btn-xs">@Html.ActionLink("Seguir Comprando", "Index", "Home")</button></td>
+    <td>
+        <a href='@Url.Action("Index", "Home")' class="btn btn-primary btn-xs">Seguir Comprando</a>
+    </td>
+             
         }
 
         <th></th>
@@ -80,9 +83,9 @@
 </table>
 @if (carritoItems > 0)
 {
-    <div>
-        <button class="btn btn-danger">@Html.ActionLink("Vaciar Carrito", "BorrarTodos", new { usuarioEmail = User.Identity.Name })</button>
-    </div>
+<div>
+    <a href='@Url.Action("BorrarTodos")' class="btn btn-danger">Vaciar Carrito</a>
+</div>
 }
 
 

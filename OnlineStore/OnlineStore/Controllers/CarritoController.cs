@@ -185,8 +185,9 @@ namespace OnlineStore.Controllers
             return RedirectToAction("Index", new { usuarioEmail = User.Identity.Name });
         }
 
-        public ActionResult BorrarTodos(string usuarioEmail)
+        public ActionResult BorrarTodos()
         {
+            string usuarioEmail = User.Identity.Name;
             IEnumerable<CarritoItem> items = obteneritemsDelCarrito(usuarioEmail);
             foreach(var item in items)
             {
@@ -202,7 +203,7 @@ namespace OnlineStore.Controllers
             if (usuarioEmail == null)
             {
                 usuarioEmail = User.Identity.Name;
-                BorrarTodos(usuarioEmail); 
+                BorrarTodos(); 
                 actualizarItemsHuerfanos(usuarioEmail);
                 return RedirectToAction("Index", new { usuarioEmail = usuarioEmail });
             }

@@ -36,10 +36,8 @@
             <td>
                 @if (item.Stock > 0)
                 {
-                <button class="btn btn-primary btn-xs">
-                @Html.ActionLink("Agregar al carrito", "AgregarItem", "Carrito",
-                         new { productoId = item.ProductoId },
-                         null)</button>
+                    <a href='@Url.Action("AgregarItem", "Carrito", new { productoId = item.ProductoId })'
+                       class="btn btn-primary btn-xs">Agregar al carrito</a>
                 }
                 else
                 {

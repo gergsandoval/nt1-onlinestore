@@ -29,5 +29,5 @@
 @Html.Partial("_OrdenDetalles", Model)
 
 <div>
-    <button class="btn btn-primary">@Html.ActionLink("Volver a la pagina principal", "Index", "Home")</button>
+    <a href='@Url.Action("Index", "Home")'class="btn btn-primary">Volver a la pagina principal</a>
 </div>
