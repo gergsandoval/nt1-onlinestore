@@ -14,16 +14,12 @@ namespace OnlineStore.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        public ActionResult Index(string usuarioEmail, bool? stockSuperado, bool? errorCompra)
+        public ActionResult Index(string usuarioEmail, bool? error, string descripcion)
         {
             IEnumerable<CarritoItem> items = obteneritemsDelCarrito(usuarioEmail);
-            if (stockSuperado.GetValueOrDefault(false))
+            if (error.GetValueOrDefault(false))
             {
-                ViewBag.Error = "El producto agregado se encuentra sin stock.";
-            }
-            else if (errorCompra.GetValueOrDefault(false))
-            {
-                ViewBag.Error = "La compra no pudo ser procesada debido que alguno de los articulos se encuentra sin stock.";
+                ViewBag.Error = descripcion;
             }
             return View(items);
         }
@@ -31,7 +27,6 @@ namespace OnlineStore.Controllers
         public ActionResult AgregarItem(int? productoId)
         {
             string usuarioEmail = User.Identity.Name;
-            bool stockSuperado = false;
             if (productoId != null)
             {
                 CarritoItem item = itemExistente(productoId, usuarioEmail);
@@ -44,7 +39,9 @@ namespace OnlineStore.Controllers
                 }
                 if (item.Producto.Stock - item.Cantidad <= 0)
                 {
-                    stockSuperado = true;
+                    bool stockSuperado = true;
+                    string stockSuperadoDescripcion = "El producto agregado se encuentra sin stock.";
+                    return RedirectToAction("Index", new { usuarioEmail = usuarioEmail, error = stockSuperado, descripcion = stockSuperadoDescripcion });
                 }
                 else
                 {
@@ -53,7 +50,7 @@ namespace OnlineStore.Controllers
                     db.SaveChanges();
                 }
             }
-            return RedirectToAction("Index", new { usuarioEmail = usuarioEmail, stockSuperado = stockSuperado });
+            return RedirectToAction("Index", new { usuarioEmail = usuarioEmail });
         }
 
         private CarritoItem itemExistente(int? productoId, string usuarioEmail)
@@ -175,7 +172,8 @@ namespace OnlineStore.Controllers
             bool errorCompra = validarStock(usuarioEmail);
             if (errorCompra)
             {
-                return RedirectToAction("Index", new { usuarioEmail = usuarioEmail, errorCompra = errorCompra });
+                string errorCompraDescripcion = "La compra no pudo ser procesada debido que alguno de los articulos se encuentra sin stock.";
+                return RedirectToAction("Index", new { usuarioEmail = usuarioEmail, error = errorCompra, descripcion = errorCompraDescripcion });
             }
             else
             {
