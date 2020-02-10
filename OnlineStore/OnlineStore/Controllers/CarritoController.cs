@@ -16,6 +16,10 @@ namespace OnlineStore.Controllers
 
         public ActionResult Index(string usuarioEmail, bool? error, string descripcion)
         {
+            if (usuarioEmail == null)
+            {
+                usuarioEmail = User.Identity.Name;
+            }
             IEnumerable<CarritoItem> items = obteneritemsDelCarrito(usuarioEmail);
             if (error.GetValueOrDefault(false))
             {
@@ -106,23 +110,44 @@ namespace OnlineStore.Controllers
                 };     
         }
 
-        public ActionResult SumarUno(int? carritoItemId)
+        public ActionResult SumarUno(int? carritoItemId, string usuarioEmail)
         {
             if (carritoItemId != null)
             {
                 CarritoItem item = db.CarritoItems.Find(carritoItemId);
-                item.Cantidad++;
-                db.Entry(item).State = EntityState.Modified;
-                db.SaveChanges();
+                bool itemInexistente = item == null;
+                if (itemInexistente)
+                {
+                    string itemExistenteError = "El producto modificado no existe.";
+                    return RedirectToAction("Index", new { usuarioEmail = usuarioEmail, error = itemInexistente, descripcion = itemExistenteError });
+                }
+                bool stockSuperado = item.Producto.Stock - item.Cantidad <= 0;
+                if (stockSuperado)
+                {
+                    string stockSuperadoError = "El producto agregado se encuentra sin stock.";
+                    return RedirectToAction("Index", new { usuarioEmail = usuarioEmail, error = stockSuperado, descripcion = stockSuperadoError });
+                } 
+                else
+                {
+                    item.Cantidad++;
+                    db.Entry(item).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
             }
             return RedirectToAction("Index", new { usuarioEmail = User.Identity.Name });
         }
 
-        public ActionResult RestarUno(int? carritoItemId)
+        public ActionResult RestarUno(int? carritoItemId, string usuarioEmail)
         {
             if (carritoItemId != null)
             {
                 CarritoItem item = db.CarritoItems.Find(carritoItemId);
+                bool itemInexistente = item == null;
+                if (itemInexistente)
+                {
+                    string itemExistenteError = "El producto modificado no existe.";
+                    return RedirectToAction("Index", new { usuarioEmail = usuarioEmail, error = itemInexistente, descripcion = itemExistenteError });
+                }
                 if (item.Cantidad > 1)
                 {
                     item.Cantidad--;
@@ -137,11 +162,17 @@ namespace OnlineStore.Controllers
             return RedirectToAction("Index", new { usuarioEmail = User.Identity.Name });
         }
 
-        public ActionResult BorrarUno(int? carritoItemId)
+        public ActionResult BorrarUno(int? carritoItemId, string usuarioEmail)
         {
             if (carritoItemId != null)
             {
                 CarritoItem item = db.CarritoItems.Find(carritoItemId);
+                bool itemInexistente = item == null;
+                if (itemInexistente)
+                {
+                    string itemExistenteError = "El producto borrado no existe.";
+                    return RedirectToAction("Index", new { usuarioEmail = usuarioEmail, error = itemInexistente, descripcion = itemExistenteError });
+                }
                 db.CarritoItems.Remove(item);
                 db.SaveChanges();
             }

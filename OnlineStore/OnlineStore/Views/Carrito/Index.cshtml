@@ -37,13 +37,13 @@
             <td>
                 @{if (item.Cantidad > 1)
                     {
-                        <button class="btn btn-primary btn-xs">@Html.ActionLink("-", "RestarUno", new { carritoItemId = item.CarritoItemId })</button>
+                        <button class="btn btn-primary btn-xs">@Html.ActionLink("-", "RestarUno", new { carritoItemId = item.CarritoItemId, usuarioEmail = User.Identity.Name })</button>
                     }
                 }
                 @Html.DisplayFor(modelItem => item.Cantidad)
                 @{ if (item.Producto.Stock > item.Cantidad)
                     {
-                        <button class="btn btn-primary btn-xs">@Html.ActionLink("+", "SumarUno", new { carritoItemId = item.CarritoItemId }) </button>
+                        <button class="btn btn-primary btn-xs">@Html.ActionLink("+", "SumarUno", new { carritoItemId = item.CarritoItemId, usuarioEmail = User.Identity.Name }) </button>
                     }
                 }
             </td>
@@ -52,7 +52,7 @@
             </td>
             @{ total += item.Subtotal;}
             <td>
-                <button class="btn btn-danger btn-xs">@Html.ActionLink("Borrar", "BorrarUno", new { carritoItemId = item.CarritoItemId }) </button>
+                <button class="btn btn-danger btn-xs">@Html.ActionLink("Borrar", "BorrarUno", new { carritoItemId = item.CarritoItemId, usuarioEmail = User.Identity.Name}) </button>
             </td>
             <th></th>
         </tr>
