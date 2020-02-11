@@ -16,7 +16,11 @@ namespace OnlineStore.Controllers
 
         public ActionResult Index(string usuarioEmail, bool? error, string descripcion)
         {
-            usuarioEmail = User.Identity.Name;
+            if (usuarioEmail != null && usuarioEmail != User.Identity.Name)
+            {
+                usuarioEmail = User.Identity.Name;
+                return RedirectToAction("Index", new { usuarioEmail = usuarioEmail });
+            }
             IEnumerable<CarritoItem> items = obteneritemsDelCarrito(usuarioEmail);
             if (error.GetValueOrDefault(false))
             {
@@ -234,12 +238,26 @@ namespace OnlineStore.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Orden orden = db.Ordenes.Find(id);
+            Orden orden = obtenerOrden(id);
             if (orden == null)
             {
                 return HttpNotFound();
             }
             return View(orden);
+        }
+
+        private Orden obtenerOrden(int? id)
+        {
+            Orden orden;
+            if (User.IsInRole("Admin"))
+            {
+                orden = db.Ordenes.Find(id);
+            }
+            else
+            {
+                orden = db.Ordenes.Where(x => x.OrdenId == id && x.UsuarioEmail == User.Identity.Name).SingleOrDefault();
+            }
+            return orden;
         }
 
         private IEnumerable<CarritoItem> obtenerItemsHuerfanos()

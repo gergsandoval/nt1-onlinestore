@@ -18,12 +18,19 @@ namespace OnlineStore.Controllers
         // GET: Ordenes
         public ActionResult Index()
         {
-            var ordenes = db.Ordenes.Where(x => x.UsuarioEmail == User.Identity.Name).ToList();
+            string usuarioEmail = User.Identity.Name;
+            var ordenes = obtenerOrdenes(usuarioEmail);
+            return View(ordenes);
+        }
+
+        private IEnumerable<Orden> obtenerOrdenes(string usuarioEmail)
+        {
+            var ordenes = db.Ordenes.Where(x => x.UsuarioEmail == usuarioEmail).ToList();
             if (User.IsInRole("Admin"))
             {
                 ordenes = db.Ordenes.ToList();
             }
-            return View(ordenes);
+            return ordenes;
         }
 
         public ActionResult Details(int? id)
@@ -32,12 +39,26 @@ namespace OnlineStore.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Orden orden = db.Ordenes.Find(id);
+            Orden orden = obtenerOrden(id);
             if (orden == null)
             {
                 return HttpNotFound();
             }
             return View(orden);
+        }
+
+        private Orden obtenerOrden(int? id)
+        {
+            Orden orden;
+            if (User.IsInRole("Admin"))
+            {
+                orden = db.Ordenes.Find(id);
+            }
+            else
+            {
+                orden = db.Ordenes.Where(x => x.OrdenId == id && x.UsuarioEmail == User.Identity.Name).SingleOrDefault();
+            }
+            return orden;
         }
 
 
