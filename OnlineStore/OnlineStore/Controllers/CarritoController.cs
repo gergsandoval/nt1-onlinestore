@@ -72,7 +72,7 @@ namespace OnlineStore.Controllers
         private IEnumerable<CarritoItem> obteneritemsDelCarrito(string usuarioEmail)
         {
             IEnumerable<CarritoItem> items;
-            if (usuarioEmail != null)
+            if (usuarioEmail != "" && usuarioEmail != null)
             {
                 items = db.CarritoItems.Where(x => x.UsuarioEmail == usuarioEmail).ToList();
             }

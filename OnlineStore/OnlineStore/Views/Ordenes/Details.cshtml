@@ -26,8 +26,9 @@
         </dd>
     </dl>
 </div>
+
 @Html.Partial("_OrdenDetalles", Model)
 
 <div>
-    <button class="btn btn-primary">@Html.ActionLink("Volver a la lista", "Index", "Ordenes")</button>
+    <a href='@Url.Action("Index")' class="btn btn-primary">Volver a la lista</a>
 </div>

@@ -32,10 +32,10 @@
         $@Html.DisplayFor(modelItem => item.Total)
     </td>
     <td>
-        <button class="btn btn-primary btn-xs">@Html.ActionLink("Detalles", "Details", new { id = item.OrdenId })</button>
-</td>
+        <a href='@Url.Action("Details", new { id = item.OrdenId })' class="btn btn-primary btn-xs">Detalles </a>
+    </td>
 </tr>
 }
 </table>
 
-<button class="btn btn-primary">@Html.ActionLink("Volver a la pagina principal", "Index", "Home")</button>
+<a href='@Url.Action("Index", "Home")' class="btn btn-primary">Volver a la pagina principal</a>

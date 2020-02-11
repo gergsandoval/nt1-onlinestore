@@ -7,8 +7,9 @@
 <h2>Lista de Categorias </h2>
 
 <p>
-    <button class="btn btn-primary"> @Html.ActionLink("Crear", "Create") </button>
+    <a href='@Url.Action("Create")' class="btn btn-primary">Crear</a>
 </p>
+
 <table class="table">
     <tr>
         <th>
@@ -23,9 +24,9 @@
             @Html.DisplayFor(modelItem => item.Nombre)
         </td>
         <td>
-            <button class="btn btn-warning btn-xs">@Html.ActionLink("Editar", "Edit", new { id=item.CategoriaId }) </button>
-            <button class="btn btn-danger btn-xs">@Html.ActionLink("Borrar", "Delete", new { id = item.CategoriaId }) </button>
-</td>
+            <a href='@Url.Action("Edit", new { id = item.CategoriaId })' class="btn btn-warning btn-xs">Editar </a>
+            <a href='@Url.Action("Delete", new { id = item.CategoriaId })' class="btn btn-danger btn-xs">Borrar</a>
+        </td>
     </tr>
 }
 
