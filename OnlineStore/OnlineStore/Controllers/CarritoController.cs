@@ -197,12 +197,11 @@ namespace OnlineStore.Controllers
             return RedirectToAction("Index", new { usuarioEmail = usuarioEmail });
         }
         [Authorize]
-        public ActionResult FinalizarCompra(string usuarioEmail)
+        public ActionResult FinalizarCompra()
         {
-            //Si el usuarioEmail llega null significa que la compra la hizo un guest
-            if (usuarioEmail == null)
+            string usuarioEmail = User.Identity.Name; //Si la propiedad esta vacia significa que la compra la hizo un guest
+            if (usuarioEmail == "" || usuarioEmail == null)
             {
-                usuarioEmail = User.Identity.Name;
                 BorrarTodos(); 
                 actualizarItemsHuerfanos(usuarioEmail);
                 return RedirectToAction("Index", new { usuarioEmail = usuarioEmail });
