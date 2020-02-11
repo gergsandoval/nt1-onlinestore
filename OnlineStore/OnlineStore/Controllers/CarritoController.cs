@@ -140,7 +140,7 @@ namespace OnlineStore.Controllers
                     db.SaveChanges();
                 }
             }
-            return RedirectToAction("Index", new { usuarioEmail = User.Identity.Name });
+            return RedirectToAction("Index", new { usuarioEmail = usuarioEmail });
         }
 
         public ActionResult RestarUno(int? carritoItemId, string usuarioEmail)
@@ -165,7 +165,7 @@ namespace OnlineStore.Controllers
                 }
                 db.SaveChanges();
             }
-            return RedirectToAction("Index", new { usuarioEmail = User.Identity.Name });
+            return RedirectToAction("Index", new { usuarioEmail = usuarioEmail });
         }
 
         public ActionResult BorrarUno(int? carritoItemId, string usuarioEmail)
@@ -182,7 +182,7 @@ namespace OnlineStore.Controllers
                 db.CarritoItems.Remove(item);
                 db.SaveChanges();
             }
-            return RedirectToAction("Index", new { usuarioEmail = User.Identity.Name });
+            return RedirectToAction("Index", new { usuarioEmail = usuarioEmail });
         }
 
         public ActionResult BorrarTodos()
