@@ -207,11 +207,17 @@ namespace OnlineStore.Controllers
                 actualizarItemsHuerfanos(usuarioEmail);
                 return RedirectToAction("Index", new { usuarioEmail = usuarioEmail });
             }
-            bool errorCompra = validarStock(usuarioEmail);
-            if (errorCompra)
+            bool carritoVacio = obtenerCantidadDeItemsDelCarrito(usuarioEmail) <= 0;
+            if (carritoVacio)
             {
-                string errorCompraDescripcion = "La compra no pudo ser procesada debido que alguno de los articulos se encuentra sin stock.";
-                return RedirectToAction("Index", new { usuarioEmail = usuarioEmail, error = errorCompra, descripcion = errorCompraDescripcion });
+                string carritoVacioError = "La compra no pudo ser procesada debido a que el carrito se encuentra vacio.";
+                return RedirectToAction("Index", new { usuarioEmail = usuarioEmail, error = carritoVacio, descripcion = carritoVacioError });
+            }
+            bool stockSuperado = validarStock(usuarioEmail);
+            if (stockSuperado)
+            {
+                string stockSuperadoError = "La compra no pudo ser procesada debido que alguno de los articulos se encuentra sin stock.";
+                return RedirectToAction("Index", new { usuarioEmail = usuarioEmail, error = stockSuperado, descripcion = stockSuperadoError });
             }
             else
             {
@@ -221,6 +227,11 @@ namespace OnlineStore.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Gracias", new { id = orden.OrdenId });
             }  
+        }
+
+        private int obtenerCantidadDeItemsDelCarrito(string usuarioEmail)
+        {
+            return obteneritemsDelCarrito(usuarioEmail).Count();
         }
 
         private Orden crearOrden(string usuarioEmail)
