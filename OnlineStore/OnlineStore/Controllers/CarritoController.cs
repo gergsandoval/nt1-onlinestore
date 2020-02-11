@@ -16,10 +16,7 @@ namespace OnlineStore.Controllers
 
         public ActionResult Index(string usuarioEmail, bool? error, string descripcion)
         {
-            if (usuarioEmail == null)
-            {
-                usuarioEmail = User.Identity.Name;
-            }
+            usuarioEmail = User.Identity.Name;
             IEnumerable<CarritoItem> items = obteneritemsDelCarrito(usuarioEmail);
             if (error.GetValueOrDefault(false))
             {
@@ -121,7 +118,7 @@ namespace OnlineStore.Controllers
             if (carritoItemId != null)
             {
                 CarritoItem item = db.CarritoItems.Find(carritoItemId);
-                bool itemInexistente = item == null || !elProductoPerteneceAlCarrito(usuarioEmail, carritoItemId);
+                bool itemInexistente = item == null || !elProductoPerteneceAlCarrito(carritoItemId);
                 if (itemInexistente)
                 {
                     string itemExistenteError = "El producto modificado no existe.";
@@ -148,7 +145,7 @@ namespace OnlineStore.Controllers
             if (carritoItemId != null)
             {
                 CarritoItem item = db.CarritoItems.Find(carritoItemId);
-                bool itemInexistente = item == null || !elProductoPerteneceAlCarrito(usuarioEmail, carritoItemId);
+                bool itemInexistente = item == null || !elProductoPerteneceAlCarrito(carritoItemId);
                 if (itemInexistente)
                 {
                     string itemExistenteError = "El producto modificado no existe.";
@@ -173,7 +170,7 @@ namespace OnlineStore.Controllers
             if (carritoItemId != null)
             {
                 CarritoItem item = db.CarritoItems.Find(carritoItemId);
-                bool itemInexistente = item == null || !elProductoPerteneceAlCarrito(usuarioEmail, carritoItemId);
+                bool itemInexistente = item == null || !elProductoPerteneceAlCarrito(carritoItemId);
                 if (itemInexistente)
                 {
                     string itemExistenteError = "El producto borrado no existe.";
@@ -292,8 +289,9 @@ namespace OnlineStore.Controllers
             return noHayStock;
         }
 
-        private bool elProductoPerteneceAlCarrito(string usuarioEmail, int? carritoItemId)
+        private bool elProductoPerteneceAlCarrito(int? carritoItemId)
         {
+            string usuarioEmail = User.Identity.Name;
             IEnumerable<CarritoItem> items = obteneritemsDelCarrito(usuarioEmail);
             bool encontreElProducto = false;
             int i = 0;
