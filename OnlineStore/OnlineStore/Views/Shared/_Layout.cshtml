@@ -36,11 +36,13 @@
             </div>
         </div>
     </div>
-    <div id="carritoDeCompras">
-        <a href="@Url.Action("Index", "Carrito", new { usuarioEmail = User.Identity.Name })">
+    
+    <a href="@Url.Action("Index", "Carrito", new { usuarioEmail = User.Identity.Name })">
+        <div id="carritoDeCompras">
             <img src="~/Imagenes/carrito.png" />
-        </a>
-    </div>
+        </div>
+    </a>
+    
     <div class="container body-content">
         @RenderBody()
         <hr />
