@@ -309,7 +309,7 @@ namespace OnlineStore.Controllers
             List<CarritoItem> itemsFueraDeStock = new List<CarritoItem>();
             foreach(var item in itemsCarrito)
             {
-                if (item.Producto.Stock - item.Cantidad <= 0)
+                if (item.Producto.Stock - item.Cantidad < 0)
                 {
                     itemsFueraDeStock.Add(item);
                 }
