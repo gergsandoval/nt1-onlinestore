@@ -213,10 +213,15 @@ namespace OnlineStore.Controllers
                 string carritoVacioError = "La compra no pudo ser procesada debido a que el carrito se encuentra vacio.";
                 return RedirectToAction("Index", new { usuarioEmail = usuarioEmail, error = carritoVacio, descripcion = carritoVacioError });
             }
-            bool stockSuperado = validarStock(usuarioEmail);
+            List<CarritoItem> itemsFueraDeStock = validarStock(usuarioEmail);
+            bool stockSuperado = itemsFueraDeStock.Count > 0;
             if (stockSuperado)
             {
-                string stockSuperadoError = "La compra no pudo ser procesada debido que alguno de los articulos se encuentra sin stock.";
+                string stockSuperadoError = "La compra no pudo ser procesada debido a que los siguientes productos se encuentran sin stock." + Environment.NewLine;
+                foreach(var item in itemsFueraDeStock)
+                {
+                    stockSuperadoError += " - " + item.Producto.Nombre + Environment.NewLine;
+                }
                 return RedirectToAction("Index", new { usuarioEmail = usuarioEmail, error = stockSuperado, descripcion = stockSuperadoError });
             }
             else
@@ -298,24 +303,18 @@ namespace OnlineStore.Controllers
             db.SaveChanges();
         }
 
-        private bool validarStock(string usuarioEmail)
+        private List<CarritoItem> validarStock(string usuarioEmail)
         {
-            IEnumerable<CarritoItem> items = obteneritemsDelCarrito(usuarioEmail);
-            bool noHayStock = false;
-            int i = 0;
-            while (i < items.Count() && !noHayStock)
+            IEnumerable<CarritoItem> itemsCarrito = obteneritemsDelCarrito(usuarioEmail);
+            List<CarritoItem> itemsFueraDeStock = new List<CarritoItem>();
+            foreach(var item in itemsCarrito)
             {
-                Producto producto = db.Productos.Find(items.ElementAt(i).ProductoId);
-                if (producto.Stock - items.ElementAt(i).Cantidad < 0)
+                if (item.Producto.Stock - item.Cantidad <= 0)
                 {
-                    noHayStock = true;
-                }
-                else
-                {
-                    i++;
+                    itemsFueraDeStock.Add(item);
                 }
             }
-            return noHayStock;
+            return itemsFueraDeStock;
         }
 
         private bool elProductoPerteneceAlCarrito(int? carritoItemId)

@@ -7,7 +7,7 @@
 }
 
 <h2>Carrito</h2>
-<h4 id="errorCarrito">@ViewBag.Error </h4>
+<h4 id="errorCarrito">@Html.Raw(ViewBag.Error) </h4>
 <table class="table">
     <tr>
         <th>
@@ -67,7 +67,7 @@
         {
     <td>
              <a href='@Url.Action("Index", "Home")' class="btn btn-primary btn-xs">Seguir Comprando</a>
-             <a href='@Url.Action("FinalizarCompra", new { usuarioEmail = User.Identity.Name })' class="btn btn-success btn-xs">Finalizar Compra</a>
+             <a href='@Url.Action("FinalizarCompra")' class="btn btn-success btn-xs">Finalizar Compra</a>
     </td>
         }
         else
