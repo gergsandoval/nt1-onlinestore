@@ -24,6 +24,8 @@ namespace OnlineStore.Controllers
             IEnumerable<CarritoItem> items = obteneritemsDelCarrito(usuarioEmail);
             if (error.GetValueOrDefault(false))
             {
+                string saltoDeLinea = "<br>";
+                descripcion = descripcion.Replace(Environment.NewLine, saltoDeLinea);
                 ViewBag.Error = descripcion;
             }
             return View(items);
@@ -218,7 +220,7 @@ namespace OnlineStore.Controllers
             if (stockSuperado)
             {
                 string stockSuperadoError = "La compra no pudo ser procesada debido a que los siguientes productos se encuentran sin stock." + Environment.NewLine;
-                foreach(var item in itemsFueraDeStock)
+                foreach (var item in itemsFueraDeStock)
                 {
                     stockSuperadoError += " - " + item.Producto.Nombre + Environment.NewLine;
                 }
