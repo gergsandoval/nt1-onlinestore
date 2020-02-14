@@ -119,8 +119,9 @@ namespace OnlineStore.Controllers
                 };     
         }
 
-        public ActionResult SumarUno(int? carritoItemId, string usuarioEmail)
+        public ActionResult SumarUno(int? carritoItemId)
         {
+            string usuarioEmail = User.Identity.Name;
             if (carritoItemId != null)
             {
                 CarritoItem item = db.CarritoItems.Find(carritoItemId);
@@ -146,8 +147,9 @@ namespace OnlineStore.Controllers
             return RedirectToAction("Index", new { usuarioEmail = usuarioEmail });
         }
 
-        public ActionResult RestarUno(int? carritoItemId, string usuarioEmail)
+        public ActionResult RestarUno(int? carritoItemId)
         {
+            string usuarioEmail = User.Identity.Name;
             if (carritoItemId != null)
             {
                 CarritoItem item = db.CarritoItems.Find(carritoItemId);
@@ -171,8 +173,9 @@ namespace OnlineStore.Controllers
             return RedirectToAction("Index", new { usuarioEmail = usuarioEmail });
         }
 
-        public ActionResult BorrarUno(int? carritoItemId, string usuarioEmail)
+        public ActionResult BorrarUno(int? carritoItemId)
         {
+            string usuarioEmail = User.Identity.Name;
             if (carritoItemId != null)
             {
                 CarritoItem item = db.CarritoItems.Find(carritoItemId);
