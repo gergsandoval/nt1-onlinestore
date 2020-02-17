@@ -215,8 +215,8 @@
     <Content Include="Imagenes\carrito.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Info Proyecto\ORT - NT1 - TP2.pdf" />
     <Content Include="Info Proyecto\Diagrama de Clases.pdf" />
+    <Content Include="Info Proyecto\ORT - NT1 - TP2.pdf" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
